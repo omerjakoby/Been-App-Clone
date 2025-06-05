@@ -1,0 +1,81 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    //--------------------------------------------------
+    // Users Collection (/users/{userId})
+    // Stores user profile info and visited countries map.
+    //--------------------------------------------------
+    match /users/{userId} {
+
+      // READ:
+      // - Allow any authenticated user to read any user's document.
+      // - Needed for:
+      //    - Fetching own data.
+      //    - Username search/uniqueness check.
+      //    - Displaying friend profiles (username/displayName).
+      //    - Viewing friend maps (reading their 'countries').
+      //    - Building the leaderboard.
+      // - Note: This exposes potentially non-public fields like email or timestamps
+      //   to all logged-in users. A more complex setup might use a separate
+      //   'publicProfiles' collection for stricter access.
+      allow read: if request.auth != null;
+
+      // CREATE:
+      // - Allow a user to create *only their own* user document.
+      // - The document ID ({userId}) must match the authenticated user's UID.
+      allow create: if request.auth.uid == userId;
+
+      // UPDATE:
+      // - Allow a user to update *only their own* user document.
+      allow update: if request.auth.uid == userId;
+
+      // DELETE:
+      // - Disallow deleting user documents directly.
+      allow delete: if false;
+    }
+
+    //--------------------------------------------------
+    // Friendships Collection (/friendships/{friendshipId})
+    // Stores the relationship status between two users.
+    // {friendshipId} is assumed to be like 'uid1_uid2' (sorted).
+    //--------------------------------------------------
+    match /friendships/{friendshipId} {
+
+      // READ:
+      // - Allow reading only if the requesting user is one of the two users
+      //   listed in the 'users' array of the friendship document.
+      // - Needed for loading friend lists, pending requests, etc.
+      allow read: if request.auth != null && ( request.auth.uid in friendshipId.split("_") ||request.auth.uid in resource.data.users);
+
+      // CREATE:
+      // - Allow creating a friendship document if:
+      //    1. The user is authenticated.
+      //    2. The authenticated user is the one listed as 'requesterId'.
+      //    3. The authenticated user is one of the two users in the 'users' array.
+      // - This assumes the client sends valid initial data (e.g., status 'pending', correct 'users' array).
+      allow create: if request.auth != null
+                    && request.auth.uid == request.resource.data.requesterId
+                    && request.auth.uid in request.resource.data.users;
+
+      // UPDATE:
+      // - Allow updating a friendship document if:
+      //    1. The user is authenticated.
+      //    2. The authenticated user is one of the two users listed in the 'users' array.
+      //    3. The authenticated user is *NOT* the original requester
+      //       (i.e., only the recipient can accept/decline).
+      // - This prevents the sender from changing the status after sending.
+      // - This rule doesn't restrict *which* fields can be updated (e.g., allows changing status).
+      allow update: if request.auth != null
+                    && request.auth.uid in resource.data.users
+                    && request.auth.uid != resource.data.requesterId;
+                    // Optional stricter rule: && request.resource.data.status in ['accepted', 'declined']
+
+      // DELETE:
+      // - Disallow deleting friendship documents directly.
+      // - Status should be updated (e.g., to 'declined' or 'removed') instead.
+      allow delete: if false;
+    }
+
+  }
+}
