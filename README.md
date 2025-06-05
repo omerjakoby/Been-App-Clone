@@ -2,7 +2,7 @@
 
 An interactive, full-stack web application that allows users to track the countries they've visited, maintain a travel bucket list, and connect with friends to see their travel maps. The project is built with D3.js for data visualization and is fully integrated with Google Firebase for backend services, including authentication, database, and hosting.
 
-**[Live Demo]([https://your-live-demo-link-here.com](https://been-app-clone.web.app/))** <!-- Replace with your Firebase hosting link! -->
+**[Live Demo](https://been-app-clone.web.app/)** <!-- Replace with your Firebase hosting link! -->
 
 ---
 
