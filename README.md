@@ -6,7 +6,7 @@ An interactive, full-stack web application that allows users to track the countr
 
 ---
 
-![Project Scree![Screenshot 2025-06-05 at 19-46-55 Been There - Visited Countries Map](https://github.com/user-attachments/assets/e8e6bbcf-6360-4f64-8d6a-f05ad10a2d41)
+![Screenshot 2025-06-05 at 19-46-55 Been There - Visited Countries Map](https://github.com/user-attachments/assets/e8e6bbcf-6360-4f64-8d6a-f05ad10a2d41)
 
 ## ✨ Features
 
