@@ -36,16 +36,18 @@ const countryExactNameToIsoMap = {
     "S. Sudan": "SS"
 };
 // --- Firebase Configuration ---
-const firebaseConfig = {
-    apiKey: "AIzaSyDC3TjcJvzjG53miADzMdbFrNRIqiTbBQs",
-    authDomain: "been-app-clone.firebaseapp.com",
-    projectId: "been-app-clone",
-    storageBucket: "been-app-clone.appspot.com",
-    messagingSenderId: "162489699712",
-    appId: "1:162489699712:web:25d8fc63cada782f3f4565",
-    measurementId: "G-5D5WCLXB93"
- };
 
+// TODO: Replace the following with your app's Firebase project configuration
+// See: https://support.google.com/firebase/answer/7015592
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID",
+    measurementId: "YOUR_MEASUREMENT_ID"
+ };
 
 // --- Initialize Firebase ---
 if (!firebase.apps.length) {
