@@ -55,25 +55,6 @@ This project is configured for deployment with Firebase Hosting. All public-faci
 └── README.md              # This file
 ```
 
-## 🔐 Backend Security - Firestore Rules
-
-This project includes robust Firestore security rules to protect user data and ensure the integrity of social interactions. These rules are defined in `firestore.rules`.
-
-**Key Security Features:**
-*   Users can only create and update their own profile documents.
-*   Any authenticated user can read public user data (like usernames) to enable searching for friends.
-*   A user can only read a "friendship" document if they are one of the two people involved in that friendship.
-*   Crucially, only the *recipient* of a friend request has the permission to update its status to `accepted` or `declined`. The sender cannot modify the request after it has been sent.
-
-```javascript
-// A snippet from firestore.rules demonstrating the update logic
-match /friendships/{friendshipId} {
-  // ... other rules
-  allow update: if request.auth != null
-                && request.auth.uid in resource.data.users
-                && request.auth.uid != resource.data.requesterId;
-}
-```
 
 ## 🚀 Running This Project Locally
 
